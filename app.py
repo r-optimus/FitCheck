@@ -29,7 +29,7 @@ def ergebnis():
     elif bmi < 30:
         bewertung = "Übergewicht"
     else:
-        bewertung = "Adipositas"
+        bewertung = "BERATung erforderlich"
 
     wasser_ml = gewicht * 35
     wasser_liter = round(wasser_ml / 1000, 2)
@@ -57,5 +57,3 @@ def static_files(filename):
 
 if __name__ == '__main__':
     run(app, host='localhost', port=8080, debug=True, reloader=True)
-
-qwertzuiopüä+#
