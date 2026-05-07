@@ -1,16 +1,60 @@
-from bottle import route, run, template, request #route=URL , run=server , template=html , request=eingabe
+from bottle import Bottle, run, template, static_file, request
 
-@route('/') #/ ist Startseite von localhost
-def start(): #Funktion wür die Startseite
-    return template('start') #start.tpl wird benutzt
+app = Bottle()
 
-@route('/eingabe') #eingabe seite: localhost8000/eingabe
+
+@app.route('/')
+def start():
+    return template('start')
+
+
+@app.route('/eingabe')
 def eingabe():
-    return template('eingabe') #eingabe.tpl
+    return template('eingabe')
 
-@route('/ergebnis', method='POST') #POST -> Eingabe verabreitet
+
+@app.route('/ergebnis', method='POST')
 def ergebnis():
-    alter = request.forms.get('alter') #request.form=formular , get alter in tpl definiert (name=alter)
-    return f"Du bist {alter} Jahre alt." #normaler f string mit alter als ausgabe
+    gewicht = float(request.forms.get('gewicht'))
+    groesse_cm = float(request.forms.get('groesse'))
 
-run(host='localhost', port=8080, debug=True)
+    groesse_m = groesse_cm / 100
+    bmi = gewicht / (groesse_m ** 2)
+    bmi_gerundet = round(bmi, 2)
+
+    if bmi < 18.5:
+        bewertung = "Untergewicht"
+    elif bmi < 25:
+        bewertung = "Normalgewicht"
+    elif bmi < 30:
+        bewertung = "Übergewicht"
+    else:
+        bewertung = "Adipositas"
+
+    wasser_ml = gewicht * 35
+    wasser_liter = round(wasser_ml / 1000, 2)
+
+    protein = round(gewicht * 1.5, 1)
+
+    return template(
+        'ergebnis',
+        bmi=bmi_gerundet,
+        bewertung=bewertung,
+        wasser_liter=wasser_liter,
+        protein=protein
+    )
+
+
+@app.route('/about')
+def about():
+    return template('about')
+
+
+@app.route('/static/<filename:path>')
+def static_files(filename):
+    return static_file(filename, root='./static')
+
+
+if __name__ == '__main__':
+    run(app, host='localhost', port=8080, debug=True, reloader=True)
+
