@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Eingabe</title>
-    <link rel="stylesheet" href="/static/style.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-    <h1>Deine Daten eingeben</h1>
+<h1>Eingabe</h1>
 
-    <p>Gib dein Gewicht und deine Größe ein. Danach berechnet FitCheck deinen BMI und deinen Wasserbedarf.</p>
+<form action="/ergebnis" method="post">
 
-    <form action="/ergebnis" method="post">
-        <label>Gewicht in kg:</label>
-        <input type="number" name="gewicht" step="0.1" required>
+    <label>Alter:</label>
+    <input type="number" name="alter">
 
-        <br><br>
+    <br><br>
 
-        <label>Größe in cm:</label>
-        <input type="number" name="groesse" step="0.1" required>
+    <label>Name:</label>
+    <input type="text" name="name">
 
-        <br><br>
+    <br><br>
 
-        <button type="submit">Berechnen</button>
-    </form>
+    <button type="submit">Absenden</button>
 
-    <br>
+</form>
 
-    <a href="/">Zurück zur Startseite</a>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
