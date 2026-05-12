@@ -49,6 +49,8 @@
             </div>
         </section>
 
+        <img class="about-image" src="/static/nazmi.png" alt="Nazmi">
+
         <footer class="footer">
             <a href="/impressum">Impressum</a>
             <a href="/agb">AGB</a>

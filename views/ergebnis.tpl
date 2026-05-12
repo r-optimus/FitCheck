@@ -22,11 +22,11 @@
             <h1>Dein Ergebnis</h1>
 
             <div class="result-grid">
-                <article class="metric">
+                <article class="metric {{bmi_klasse}}">
                     <span>BMI</span>
                     <strong>{{bmi}}</strong>
                 </article>
-                <article class="metric">
+                <article class="metric {{bmi_klasse}}">
                     <span>Bewertung</span>
                     <strong>{{bewertung}}</strong>
                 </article>

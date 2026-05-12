@@ -19,6 +19,8 @@ a {
 }
 
 .page-shell {
+    display: flex;
+    flex-direction: column;
     width: min(920px, calc(100% - 32px));
     min-height: 100vh;
     margin: 0 auto;
@@ -83,13 +85,21 @@ a {
 }
 
 .panel {
-    max-width: 680px;
+    width: 100%;
+    max-width: 600px;
     margin: 0 auto;
-    padding: clamp(24px, 5vw, 44px);
+    padding: clamp(32px, 6vw, 64px);
 }
 
 .content {
     max-width: 760px;
+}
+
+.about-image {
+    display: block;
+    width: min(260px, 70vw);
+    height: auto;
+    margin: 32px auto 0;
 }
 
 .eyebrow {
@@ -150,7 +160,8 @@ ul {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px 22px;
-    margin-top: 32px;
+    margin-top: auto;
+    padding-top: 32px;
     text-align: center;
 }
 
@@ -210,9 +221,10 @@ label {
     font-weight: 800;
 }
 
-input {
+input,
+select {
     width: 100%;
-    min-height: 48px;
+    height: 48px;
     margin-bottom: 10px;
     padding: 0 14px;
     border: 1px solid #c9d8d3;
@@ -222,7 +234,12 @@ input {
     font: inherit;
 }
 
-input:focus {
+select {
+    appearance: none;
+}
+
+input:focus,
+select:focus {
     border-color: #0f6f78;
     outline: 3px solid rgba(15, 111, 120, 0.16);
 }
@@ -253,6 +270,33 @@ input:focus {
     color: #12373d;
     font-size: clamp(1.45rem, 6vw, 2.3rem);
     line-height: 1.1;
+}
+
+.metric.bmi-orange {
+    border-color: #f0a13a;
+    background: #fff4e3;
+}
+
+.metric.bmi-orange strong {
+    color: #b25d00;
+}
+
+.metric.bmi-green {
+    border-color: #55b879;
+    background: #eaf8ef;
+}
+
+.metric.bmi-green strong {
+    color: #247344;
+}
+
+.metric.bmi-red {
+    border-color: #e06262;
+    background: #ffecec;
+}
+
+.metric.bmi-red strong {
+    color: #b32626;
 }
 
 @media (max-width: 620px) {

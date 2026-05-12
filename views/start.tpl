@@ -14,6 +14,7 @@
             </a>
             <div>
                 <a href="/eingabe">Rechner</a>
+                <a href="/tipps">Tipps</a>
             </div>
         </nav>
 

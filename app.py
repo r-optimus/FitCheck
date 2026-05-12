@@ -15,8 +15,11 @@ def eingabe():
 
 @app.route('/ergebnis', method='POST')
 def ergebnis():
+
     gewicht = float(request.forms.get('gewicht'))
     groesse_cm = float(request.forms.get('groesse'))
+    alter = int(request.forms.get('alter'))
+    
 
     groesse_m = groesse_cm / 100
     bmi = gewicht / (groesse_m ** 2)
@@ -24,12 +27,16 @@ def ergebnis():
 
     if bmi < 18.5:
         bewertung = "Untergewicht"
+        bmi_klasse = "bmi-orange"
     elif bmi < 25:
         bewertung = "Normalgewicht"
+        bmi_klasse = "bmi-green"
     elif bmi < 30:
         bewertung = "Übergewicht"
+        bmi_klasse = "bmi-orange"
     else:
-        bewertung = "BERATung erforderrlich"
+        bewertung = "Adipositas"
+        bmi_klasse = "bmi-red"
 
     wasser_ml = gewicht * 35
     wasser_liter = round(wasser_ml / 1000, 2)
@@ -40,8 +47,10 @@ def ergebnis():
         'ergebnis',
         bmi=bmi_gerundet,
         bewertung=bewertung,
+        bmi_klasse=bmi_klasse,
         wasser_liter=wasser_liter,
-        protein=protein
+        protein=protein,
+        
     )
 
 
@@ -64,6 +73,9 @@ def datenschutz():
 def agb():
     return template('agb')
 
+@app.route('/tipps')
+def tipps():
+    return template('tipps')
 
 @app.route('/static/<filename:path>')
 def static_files(filename):
