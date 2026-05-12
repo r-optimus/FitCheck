@@ -33,6 +33,13 @@
             <button type="submit">Absenden</button>
         </form>
     </section>
+
+    <footer class="footer">
+        <a href="/impressum">Impressum</a>
+        <a href="/agb">AGB</a>
+        <a href="/datenschutz">Datenschutz</a>
+        <a href="/about">Über uns</a>
+    </footer>
 </main>
 
 </body>

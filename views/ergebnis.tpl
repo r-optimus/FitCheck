@@ -14,7 +14,6 @@
             </a>
             <div>
                 <a href="/eingabe">Rechner</a>
-                <a href="/about">Über</a>
             </div>
         </nav>
 
@@ -46,6 +45,13 @@
                 <a class="button secondary" href="/">Startseite</a>
             </div>
         </section>
+
+        <footer class="footer">
+            <a href="/impressum">Impressum</a>
+            <a href="/agb">AGB</a>
+            <a href="/datenschutz">Datenschutz</a>
+            <a href="/about">Über uns</a>
+        </footer>
     </main>
 
 </body>
