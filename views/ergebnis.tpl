@@ -38,6 +38,10 @@
                     <span>Proteinbedarf</span>
                     <strong>{{protein}} g</strong>
                 </article>
+                <article class="metric">
+                    <span>Grundumsatz</span>
+                    <strong>{{grundumsatz}} kcal/Tag</strong>
+                </article>
             </div>
 
             <div class="actions">

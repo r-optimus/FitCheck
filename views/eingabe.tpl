@@ -29,16 +29,21 @@
                 <option value="maennlich">Männlich</option>
                 <option value="weiblich">Weiblich</option>
             </select>
-            
+
             <label for="alter">Alter</label>
-            <input id="alter" type="number" name="alter" step="1" min="1" placeholder="z. B. 30" required>
+            <input id="alter" type="number" name="alter" step="1" min="1" max="130" placeholder="in Jahren" required
+            oninvalid="this.setCustomValidity('Bitte gib ein realistisches Alter ein.')"
+             oninput="this.setCustomValidity('')" >  
+            
+            <label for="gewicht">Gewicht</label>
+            <input id="gewicht" type="number" name="gewicht" step="0.1" min="1" max="600" placeholder="in kg" required
+            oninvalid="this.setCustomValidity('Bitte gib ein realistisches Gewicht ein.')"
+             oninput="this.setCustomValidity('')" >  
 
-            <label for="gewicht">Gewicht in kg</label>
-            <input id="gewicht" type="number" name="gewicht" step="0.1" min="1" placeholder="z. B. 70" required>
-
-            <label for="groesse">Größe in cm</label>
-            <input id="groesse" type="number" name="groesse" step="0.1" min="1" placeholder="z. B. 175" required>
-
+            <label for="groesse">Größe</label>
+            <input id="groesse" type="number" name="groesse" step="1" min="1" max="300" placeholder="in cm" required
+            oninvalid="this.setCustomValidity('Bitte gib eine realistische Größe ein.')"
+             oninput="this.setCustomValidity('')" >  
             
 
             <label for="aktivitaet">Aktivitätslevel</label>
