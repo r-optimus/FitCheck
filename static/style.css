@@ -45,9 +45,15 @@ a {
 }
 
 .nav .brand {
+    display: inline-flex;
+    align-items: center;
     margin-left: 0;
-    color: #15393f;
-    font-size: 1.35rem;
+}
+
+.nav-logo {
+    display: block;
+    width: 48px;
+    height: auto;
 }
 
 .hero {
@@ -66,6 +72,14 @@ a {
 .hero-content {
     margin: auto 0;
     padding: clamp(32px, 8vw, 72px);
+    text-align: center;
+}
+
+.hero-logo {
+    display: block;
+    width: min(520px, 86vw);
+    height: auto;
+    margin: 0 auto 32px;
 }
 
 .panel {
@@ -125,6 +139,29 @@ ul {
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 28px;
+}
+
+.hero-content .actions {
+    justify-content: center;
+}
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 22px;
+    margin-top: 32px;
+    text-align: center;
+}
+
+.footer a {
+    color: #52646b;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #0f6f78;
 }
 
 .button,

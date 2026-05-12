@@ -9,7 +9,9 @@
 
     <main class="page-shell">
         <nav class="nav">
-            <a class="brand" href="/">FitCheck</a>
+            <a class="brand" href="/">
+                <img class="nav-logo" src="/static/logo-mini.png" alt="FitCheck">
+            </a>
             <div>
                 <a href="/">Start</a>
                 <a href="/eingabe">Rechner</a>

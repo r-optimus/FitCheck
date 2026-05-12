@@ -9,16 +9,17 @@
 
     <main class="page-shell hero">
         <nav class="nav">
-            <a class="brand" href="/">FitCheck</a>
+            <a class="brand" href="/">
+                <img class="nav-logo" src="/static/logo-mini.png" alt="FitCheck">
+            </a>
             <div>
                 <a href="/eingabe">Rechner</a>
-                <a href="/about">Über</a>
             </div>
         </nav>
 
         <section class="hero-content">
+            <img class="hero-logo" src="/static/logo.png" alt="FitCheck Logo">
             <p class="eyebrow">Fitnesswerte einfach berechnen</p>
-            <h1>FitCheck</h1>
 
             <p>
                 Berechne deinen BMI, deinen Wasserbedarf und deinen Proteinbedarf.
@@ -26,9 +27,15 @@
 
             <div class="actions">
                 <a class="button primary" href="/eingabe">Berechnung starten</a>
-                <a class="button secondary" href="/about">Über FitCheck</a>
             </div>
         </section>
+
+        <footer class="footer">
+            <a href="/about">Über uns</a>
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
+            <a href="/agb">AGB</a>
+        </footer>
     </main>
 
 </body>
