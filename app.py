@@ -29,7 +29,7 @@ def ergebnis():
     elif bmi < 30:
         bewertung = "Übergewicht"
     else:
-        bewertung = "BERATung erforderlich"
+        bewertung = "BERATung erforderrlich"
 
     wasser_ml = gewicht * 35
     wasser_liter = round(wasser_ml / 1000, 2)
