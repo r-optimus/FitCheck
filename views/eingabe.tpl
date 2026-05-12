@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Eingabe</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
-<h1>Eingabe</h1>
+<main class="page-shell">
+    <nav class="nav">
+        <a class="brand" href="/">FitCheck</a>
+        <div>
+            <a href="/">Start</a>
+            <a href="/about">Über</a>
+        </div>
+    </nav>
 
-<form action="/ergebnis" method="post">
+    <section class="panel">
+        <p class="eyebrow">Deine Werte</p>
+        <h1>Eingabe</h1>
 
-    <label>Alter:</label>
-    <input type="number" name="alter">
+        <form action="/ergebnis" method="post">
+            <label for="gewicht">Gewicht in kg</label>
+            <input id="gewicht" type="number" name="gewicht" step="0.1" min="1" placeholder="z. B. 70" required>
 
-    <br><br>
+            <label for="groesse">Größe in cm</label>
+            <input id="groesse" type="number" name="groesse" step="0.1" min="1" placeholder="z. B. 175" required>
 
-    <label>Name:</label>
-    <input type="text" name="name">
-
-    <br><br>
-
-    <button type="submit">Absenden</button>
-
-</form>
-
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+            <button type="submit">Absenden</button>
+        </form>
+    </section>
+</main>
 
 </body>
 </html>

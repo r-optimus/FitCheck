@@ -7,32 +7,46 @@
 </head>
 <body>
 
-    <h1>Über FitCheck</h1>
+    <main class="page-shell">
+        <nav class="nav">
+            <a class="brand" href="/">FitCheck</a>
+            <div>
+                <a href="/">Start</a>
+                <a href="/eingabe">Rechner</a>
+            </div>
+        </nav>
 
-    <p>
-        FitCheck ist ein kleines Webprojekt mit Python und Bottle.
-        Ziel der App ist es, einfache Fitnesswerte zu berechnen und verständlich anzuzeigen.
-    </p>
+        <section class="panel content">
+            <p class="eyebrow">Über das Projekt</p>
+            <h1>Über FitCheck</h1>
 
-    <h2>Technischer Aufbau</h2>
+            <p>
+                FitCheck ist ein kleines Webprojekt mit Python und Bottle.
+                Ziel der App ist es, einfache Fitnesswerte zu berechnen und verständlich anzuzeigen.
+            </p>
 
-    <p>
-        Die Datei app.py steuert die App. 
-        Die Seiten liegen im Ordner views. 
-        Das Design liegt im Ordner static.
-    </p>
+            <h2>Technischer Aufbau</h2>
 
-    <h2>Funktionen</h2>
+            <p>
+                Die Datei app.py steuert die App. 
+                Die Seiten liegen im Ordner views. 
+                Das Design liegt im Ordner static.
+            </p>
 
-    <ul>
-        <li>BMI-Berechnung</li>
-        <li>BMI-Bewertung</li>
-        <li>Wasserbedarf pro Tag</li>
-    </ul>
+            <h2>Funktionen</h2>
 
-    <a href="/">Zurück zur Startseite</a>
-    <br>
-    <a href="/eingabe">Zur Eingabe</a>
+            <ul>
+                <li>BMI-Berechnung</li>
+                <li>BMI-Bewertung</li>
+                <li>Wasserbedarf pro Tag</li>
+            </ul>
+
+            <div class="actions">
+                <a class="button primary" href="/eingabe">Zur Eingabe</a>
+                <a class="button secondary" href="/">Startseite</a>
+            </div>
+        </section>
+    </main>
 
 </body>
 </html>

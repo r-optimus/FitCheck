@@ -7,16 +7,44 @@
 </head>
 <body>
 
-    <h1>Dein Ergebnis</h1>
+    <main class="page-shell">
+        <nav class="nav">
+            <a class="brand" href="/">FitCheck</a>
+            <div>
+                <a href="/eingabe">Rechner</a>
+                <a href="/about">Über</a>
+            </div>
+        </nav>
 
-    <p>Dein BMI ist: <strong>{{bmi}}</strong></p>
-    <p>Bewertung: <strong>{{bewertung}}</strong></p>
-    <p>Empfohlener Wasserbedarf: <strong>{{wasser_liter}} Liter pro Tag</strong></p>
-    <p>Empfohlener Proteinbedarf: <strong>{{protein}} g pro Tag</strong></p>
+        <section class="panel">
+            <p class="eyebrow">Auswertung</p>
+            <h1>Dein Ergebnis</h1>
 
-    <a href="/eingabe">Neue Berechnung</a>
-    <br>
-    <a href="/">Zurück zur Startseite</a>
+            <div class="result-grid">
+                <article class="metric">
+                    <span>BMI</span>
+                    <strong>{{bmi}}</strong>
+                </article>
+                <article class="metric">
+                    <span>Bewertung</span>
+                    <strong>{{bewertung}}</strong>
+                </article>
+                <article class="metric">
+                    <span>Wasserbedarf</span>
+                    <strong>{{wasser_liter}} L</strong>
+                </article>
+                <article class="metric">
+                    <span>Proteinbedarf</span>
+                    <strong>{{protein}} g</strong>
+                </article>
+            </div>
+
+            <div class="actions">
+                <a class="button primary" href="/eingabe">Neue Berechnung</a>
+                <a class="button secondary" href="/">Startseite</a>
+            </div>
+        </section>
+    </main>
 
 </body>
 </html>
