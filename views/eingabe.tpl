@@ -49,8 +49,8 @@
             <label for="aktivitaet">Aktivitätslevel</label>
             <select id="aktivitaet" name="aktivitaet" required>
                 <option value="">Bitte auswählen</option>
-                <option value="niedrig">Niedrig</option>
-                <option value="mittel">Mittel</option>
+                <option value="wenig">Niedrig</option>
+                <option value="moderat">Mittel</option>
                 <option value="hoch">Hoch</option>
             </select>
 

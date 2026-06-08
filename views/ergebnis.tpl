@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ergebnis</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
 
@@ -23,29 +23,60 @@
 
             <div class="result-grid">
                 <article class="metric {{bmi_klasse}}">
-                    <span>BMI</span>
+                    <span class="metric-info" data-tooltip="Der BMI bewertet dein Gewicht im Verhältnis zu deiner Körpergröße.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">BMI</span>
                     <strong>{{bmi}}</strong>
                 </article>
                 <article class="metric {{bmi_klasse}}">
-                    <span>Bewertung</span>
+                    <span class="metric-info" data-tooltip="Diese Kategorie zeigt, wie dein BMI grob eingeordnet wird.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">Bewertung</span>
                     <strong>{{bewertung}}</strong>
                 </article>
                 <article class="metric">
-                    <span>Wasserbedarf</span>
+                    <span class="metric-info" data-tooltip="Das ist eine grobe Empfehlung für deine tägliche Trinkmenge.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">Wasserbedarf</span>
                     <strong>{{wasser_liter}} L</strong>
                 </article>
                 <article class="metric">
-                    <span>Proteinbedarf</span>
+                    <span class="metric-info" data-tooltip="Protein unterstützt Muskeln, Sättigung und Regeneration.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">Proteinbedarf</span>
                     <strong>{{protein}} g</strong>
                 </article>
                 <article class="metric">
-                    <span>Grundumsatz</span>
-                    <strong>{{grundumsatz}} kcal/Tag</strong>
+                    <span class="metric-info" data-tooltip="Dein geschätzter täglicher Kalorienverbrauch mit Aktivitätslevel.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">Gesamtumsatz</span>
+                    <strong>{{gesamtumsatz}} kcal</strong>
+                </article>
+                <article class="metric">
+                    <span class="metric-info" data-tooltip="Dieses Ziel passt den Gesamtumsatz an dein ausgewähltes Ziel an.">
+                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
+                    </span>
+                    <span class="metric-label">Kalorienziel ({{ziel_name}})</span>
+                    <strong>{{kalorienziel}} kcal</strong>
                 </article>
             </div>
 
-            <div class="actions">
-                <a class="button primary" href="/eingabe">Neue Berechnung</a>
+            <div class="actions result-actions">
+                <form class="export-form" action="/export" method="post">
+                    <input type="hidden" name="geschlecht" value="{{geschlecht}}">
+                    <input type="hidden" name="alter" value="{{alter}}">
+                    <input type="hidden" name="gewicht" value="{{gewicht}}">
+                    <input type="hidden" name="groesse" value="{{groesse_cm}}">
+                    <input type="hidden" name="aktivitaet" value="{{aktivitaet}}">
+                    <input type="hidden" name="ziel" value="{{ziel}}">
+                    <button class="primary" type="submit">Ergebnis herunterladen</button>
+                </form>
+                <a class="button secondary" href="/eingabe">Neue Berechnung</a>
                 <a class="button secondary" href="/">Startseite</a>
             </div>
         </section>

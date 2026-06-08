@@ -3,11 +3,36 @@ def get_result_context(form):
     groesse_cm = float(form.get('groesse'))
     alter = int(form.get('alter'))
     geschlecht = form.get('geschlecht')
+    aktivitaet = form.get('aktivitaet')
+    ziel = form.get('ziel')
 
-    return _calculate_results(gewicht, groesse_cm, alter, geschlecht)
+    return _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
 
 
-def _calculate_results(gewicht, groesse_cm, alter, geschlecht):
+def build_export_text(form):
+    result = get_result_context(form)
+
+    return f"""FitCheck Ergebnis
+
+Eingaben
+Geschlecht: {result["geschlecht_name"]}
+Alter: {result["alter"]} Jahre
+Gewicht: {result["gewicht"]} kg
+Größe: {result["groesse_cm"]} cm
+Aktivitätslevel: {result["aktivitaet_name"]}
+Ziel: {result["ziel_name"]}
+
+Ergebnis
+BMI: {result["bmi"]}
+Bewertung: {result["bewertung"]}
+Wasserbedarf: {result["wasser_liter"]} L
+Proteinbedarf: {result["protein"]} g
+Gesamtumsatz: {result["gesamtumsatz"]} kcal
+Kalorienziel ({result["ziel_name"]}): {result["kalorienziel"]} kcal
+"""
+
+
+def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel):
     groesse_m = groesse_cm / 100
     bmi = gewicht / (groesse_m ** 2)
     bmi_gerundet = round(bmi, 2)
@@ -17,14 +42,44 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht):
     else:
         grundumsatz = 10 * gewicht + 6.25 * groesse_cm - 5 * alter - 161
 
+    aktivitaet_faktoren = {
+        "wenig": 1.2,
+        "moderat": 1.55,
+        "hoch": 1.75
+    }
+
+    gesamtumsatz = grundumsatz * aktivitaet_faktoren[aktivitaet]
+
+    if ziel == "abnehmen":
+        kalorienziel = gesamtumsatz - 500
+    elif ziel == "muskelaufbau":
+        kalorienziel = gesamtumsatz + 300
+    else:
+        kalorienziel = gesamtumsatz
+
+    ziel_namen = {
+        "abnehmen": "Abnehmen",
+        "halten": " Halten",
+        "muskelaufbau": "Aufbauen"
+    }
+    geschlecht_namen = {
+        "maennlich": "Männlich",
+        "weiblich": "Weiblich"
+    }
+    aktivitaet_namen = {
+        "wenig": "Niedrig",
+        "moderat": "Mittel",
+        "hoch": "Hoch"
+    }
+
     if bmi < 18.5:
-        bewertung = "Untergewicht"
+        bewertung = "Unter"
         bmi_klasse = "bmi-orange"
     elif bmi < 25:
-        bewertung = "Normalgewicht"
+        bewertung = "Normal"
         bmi_klasse = "bmi-green"
     elif bmi < 30:
-        bewertung = "Übergewicht"
+        bewertung = "Über"
         bmi_klasse = "bmi-orange"
     else:
         bewertung = "Adipositas"
@@ -32,7 +87,12 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht):
 
     wasser_ml = gewicht * 35
     wasser_liter = round(wasser_ml / 1000, 2)
-    protein = round(gewicht * 1.5, 1)
+    protein_faktoren = {
+        "abnehmen": 2.0,
+        "muskelaufbau": 1.8,
+        "halten": 1.4
+    }
+    protein = round(gewicht * protein_faktoren[ziel], 1)
 
     return {
         "bmi": bmi_gerundet,
@@ -40,5 +100,15 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht):
         "bmi_klasse": bmi_klasse,
         "wasser_liter": wasser_liter,
         "protein": protein,
-        "grundumsatz": round(grundumsatz),
+        "gesamtumsatz": round(gesamtumsatz),
+        "kalorienziel": round(kalorienziel),
+        "ziel_name": ziel_namen[ziel],
+        "geschlecht": geschlecht,
+        "geschlecht_name": geschlecht_namen[geschlecht],
+        "alter": alter,
+        "gewicht": gewicht,
+        "groesse_cm": groesse_cm,
+        "aktivitaet": aktivitaet,
+        "aktivitaet_name": aktivitaet_namen[aktivitaet],
+        "ziel": ziel,
     }

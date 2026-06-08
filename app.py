@@ -1,5 +1,5 @@
-from bottle import Bottle, run, template, static_file, request
-from calculation import get_result_context
+from bottle import Bottle, run, template, static_file, request, response
+from calculation import build_export_text, get_result_context
 
 app = Bottle()
 
@@ -17,6 +17,13 @@ def eingabe():
 @app.route('/ergebnis', method='POST')
 def ergebnis():
     return template('ergebnis', **get_result_context(request.forms))
+
+
+@app.route('/export', method='POST')
+def export():
+    response.content_type = 'text/plain; charset=utf-8'
+    response.set_header('Content-Disposition', 'attachment; filename="fitcheck-ergebnis.txt"')
+    return build_export_text(request.forms)
 
 
 @app.route('/about')
