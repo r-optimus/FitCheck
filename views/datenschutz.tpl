@@ -15,26 +15,34 @@
             <div>
                 <a href="/">Start</a>
                 <a href="/eingabe">Rechner</a>
+                <a href="/tipps">Tipps</a>
+                <a href="/quiz">Quiz</a>
+                <a href="/workout">Workout</a>
             </div>
         </nav>
 
         <section class="panel content">
             <p class="eyebrow">Rechtliches</p>
-            <h1>Datenschutz</h1>
+            <h1>Datenschutzerklärung</h1>
 
             <p>
-                Diese Seite informiert darüber, wie FitCheck mit eingegebenen Daten umgeht.
+                Diese Webanwendung wurde im Rahmen eines Hochschulprojekts entwickelt.
             </p>
 
-            <h2>Eingegebene Daten</h2>
             <p>
-                Gewicht und Größe werden nur zur Berechnung der Ergebnisse verwendet.
-                Eine dauerhafte Speicherung findet in dieser Beispiel-App nicht statt.
+                Die eingegebenen Daten werden ausschließlich zur Berechnung der angezeigten Ergebnisse verwendet. Es erfolgt keine dauerhafte Speicherung personenbezogener Daten.
             </p>
 
-            <h2>Kontakt</h2>
             <p>
-                Bei Fragen zum Datenschutz erreichst du uns unter info@fitcheck.example.
+                Die Anwendung verwendet keine Cookies, keine Tracking-Technologien und gibt keine Daten an Dritte weiter.
+            </p>
+
+            <p>
+                Alle Berechnungen dienen ausschließlich Informationszwecken und ersetzen keine medizinische Beratung.
+            </p>
+
+            <p>
+                Bei Fragen zum Datenschutz wenden Sie sich bitte an die im Impressum genannte verantwortliche Person.
             </p>
 
             <div class="actions">

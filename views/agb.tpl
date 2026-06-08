@@ -15,27 +15,43 @@
             <div>
                 <a href="/">Start</a>
                 <a href="/eingabe">Rechner</a>
+                <a href="/tipps">Tipps</a>
+                <a href="/quiz">Quiz</a>
+                <a href="/workout">Workout</a>
             </div>
         </nav>
 
         <section class="panel content">
             <p class="eyebrow">Rechtliches</p>
-            <h1>AGB</h1>
+            <h1>Allgemeine Geschäftsbedingungen (AGB)</h1>
 
+            <h2>1. Geltungsbereich</h2>
             <p>
-                FitCheck ist eine einfache Beispiel-App zur Berechnung von Fitnesswerten.
+                Diese Anwendung wurde als Hochschulprojekt entwickelt und dient ausschließlich Informations- und Demonstrationszwecken.
             </p>
 
-            <h2>Nutzung</h2>
+            <h2>2. Haftungsausschluss</h2>
             <p>
-                Die berechneten Werte dienen nur zur Orientierung und ersetzen keine
-                medizinische Beratung.
+                Die bereitgestellten Berechnungen, Empfehlungen und Informationen erfolgen ohne Gewähr auf Richtigkeit, Vollständigkeit oder Aktualität.
             </p>
 
-            <h2>Verfügbarkeit</h2>
             <p>
-                Es besteht kein Anspruch auf dauerhafte Verfügbarkeit oder fehlerfreie
-                Berechnung der Anwendung.
+                Die Ergebnisse stellen keine medizinische Beratung dar und ersetzen nicht die Beratung durch qualifizierte Fachpersonen.
+            </p>
+
+            <h2>3. Nutzung</h2>
+            <p>
+                Die Nutzung der Anwendung erfolgt auf eigene Verantwortung.
+            </p>
+
+            <h2>4. Verfügbarkeit</h2>
+            <p>
+                Es besteht kein Anspruch auf dauerhafte Verfügbarkeit oder Fehlerfreiheit der Anwendung.
+            </p>
+
+            <h2>5. Schlussbestimmungen</h2>
+            <p>
+                Diese Anwendung wurde ausschließlich zu Lehr- und Demonstrationszwecken erstellt.
             </p>
 
             <div class="actions">

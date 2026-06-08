@@ -15,6 +15,9 @@
             <div>
                 <a href="/">Start</a>
                 <a href="/eingabe">Rechner</a>
+                <a href="/tipps">Tipps</a>
+                <a href="/quiz">Quiz</a>
+                <a href="/workout">Workout</a>
             </div>
         </nav>
 
