@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ergebnis</title>
-    <link rel="stylesheet" href="/static/style.css?v=2">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
@@ -23,44 +23,32 @@
 
             <div class="result-grid">
                 <article class="metric {{bmi_klasse}}">
-                    <span class="metric-info" data-tooltip="Der BMI bewertet dein Gewicht im Verhältnis zu deiner Körpergröße.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
                     <span class="metric-label">BMI</span>
                     <strong>{{bmi}}</strong>
                 </article>
-                <article class="metric {{bmi_klasse}}">
-                    <span class="metric-info" data-tooltip="Diese Kategorie zeigt, wie dein BMI grob eingeordnet wird.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                <article class="metric metric-wide metric-rating {{bmi_klasse}}">
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="10" height="10">
                     <span class="metric-label">Bewertung</span>
                     <strong>{{bewertung}}</strong>
                 </article>
                 <article class="metric">
-                    <span class="metric-info" data-tooltip="Das ist eine grobe Empfehlung für deine tägliche Trinkmenge.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="10" height="10">
                     <span class="metric-label">Wasserbedarf</span>
                     <strong>{{wasser_liter}} L</strong>
                 </article>
                 <article class="metric">
-                    <span class="metric-info" data-tooltip="Protein unterstützt Muskeln, Sättigung und Regeneration.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="10" height="10">
                     <span class="metric-label">Proteinbedarf</span>
                     <strong>{{protein}} g</strong>
                 </article>
                 <article class="metric">
-                    <span class="metric-info" data-tooltip="Dein geschätzter täglicher Kalorienverbrauch mit Aktivitätslevel.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="10" height="10">
                     <span class="metric-label">Gesamtumsatz</span>
                     <strong>{{gesamtumsatz}} kcal</strong>
                 </article>
                 <article class="metric">
-                    <span class="metric-info" data-tooltip="Dieses Ziel passt den Gesamtumsatz an dein ausgewähltes Ziel an.">
-                        <img class="metric-info-icon" src="/static/infobox.png" alt="" width="15" height="15">
-                    </span>
+                    <img class="metric-info-icon" src="/static/infobox.png" alt="" width="10" height="10">
                     <span class="metric-label">Kalorienziel ({{ziel_name}})</span>
                     <strong>{{kalorienziel}} kcal</strong>
                 </article>

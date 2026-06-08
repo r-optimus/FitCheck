@@ -273,51 +273,16 @@ select:focus {
     background: #f8fbf7;
 }
 
-.metric-info {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    display: block;
-    width: 15px !important;
-    height: 15px !important;
-    cursor: help;
-    z-index: 3;
-}
-
 .metric-info-icon {
-    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     width: 15px !important;
     height: 15px !important;
     max-width: 15px !important;
     max-height: 15px !important;
     object-fit: contain;
     pointer-events: none;
-}
-
-.metric-info::after {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 8px);
-    width: 220px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #17373d;
-    color: #ffffff;
-    content: attr(data-tooltip);
-    font-size: 0.85rem;
-    font-weight: 700;
-    line-height: 1.35;
-    text-align: left;
-    box-shadow: 0 12px 26px rgba(29, 52, 58, 0.18);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(4px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.metric-info:hover::after {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .metric-wide {
