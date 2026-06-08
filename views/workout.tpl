@@ -30,6 +30,7 @@
                 <label for="ort">Trainingsort</label>
                 <select id="ort" name="ort" required>
                     <option value="zuhause">Zuhause</option>
+                    <option value="outdoor">Outdoor</option>
                     <option value="gym">Gym</option>
                 </select>
 
@@ -37,6 +38,7 @@
                 <select id="level" name="level" required>
                     <option value="anfaenger">Anfänger</option>
                     <option value="fortgeschritten">Fortgeschritten</option>
+                    <option value="profi">Profi</option>
                 </select>
 
                 <button class="button primary" type="submit">Workout erstellen</button>

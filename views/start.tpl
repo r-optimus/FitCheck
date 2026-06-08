@@ -31,9 +31,9 @@
 
             <div class="actions">
                 <a class="button primary" href="/eingabe">Berechnung starten</a>
-                <a class="button secondary" href="/challenge">Daily Challenge</a>
-                <a class="button secondary" href="/quiz">Quiz starten</a>
                 <a class="button secondary" href="/workout">Workout erstellen</a>
+                <a class="button secondary" href="/quiz">Quiz starten</a>
+                <a class="button secondary" href="/challenge">Daily Challenge</a>
             </div>
 
             % if challenge:
