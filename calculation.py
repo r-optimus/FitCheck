@@ -94,7 +94,7 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
     }
     protein = round(gewicht * protein_faktoren[ziel], 1)
 
-    return {
+    result = {
         "bmi": bmi_gerundet,
         "bewertung": bewertung,
         "bmi_klasse": bmi_klasse,
@@ -112,3 +112,14 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
         "aktivitaet_name": aktivitaet_namen[aktivitaet],
         "ziel": ziel,
     }
+    result["metrics"] = [
+        ("BMI", result["bmi"], "⚖️", "Der BMI bewertet dein Gewicht im Verhältnis zu deiner Körpergröße.", bmi_klasse),
+        ("Bewertung", bewertung, "✅", "Diese Kategorie zeigt, wie dein BMI grob eingeordnet wird.", bmi_klasse),
+        ("Wasserbedarf", f'{wasser_liter} L', "💧", "Das ist eine grobe Empfehlung für deine tägliche Trinkmenge.", ""),
+        ("Proteinbedarf", f'{protein} g', "🥚", "Protein unterstützt Muskeln, Sättigung und Regeneration.", ""),
+        ("Gesamtumsatz", f'{round(gesamtumsatz)} kcal', "🔥", "Dein geschätzter täglicher Kalorienverbrauch mit Aktivitätslevel.", ""),
+        (f'Kalorienziel ({ziel_namen[ziel]})', f'{round(kalorienziel)} kcal', "🎯", "Dieses Ziel passt den Gesamtumsatz an dein ausgewähltes Ziel an.", ""),
+    ]
+    result["export_fields"] = [(name, result[name]) for name in ("geschlecht", "alter", "gewicht", "groesse_cm", "aktivitaet", "ziel")]
+    result["export_fields"][3] = ("groesse", groesse_cm)
+    return result
