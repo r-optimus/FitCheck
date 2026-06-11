@@ -3,13 +3,16 @@ import random
 from bottle import Bottle, request, response, run, static_file, template
 from calculation import build_export_text, get_result_context
 
+# Erstellt die Bottle-App.
 app = Bottle()
 
 
+# Macht aus Textlisten einfache Python-Listen.
 def rows(text):
     return [line.split("|") for line in text.strip().splitlines()]
 
 
+# Fragen und Antworten fuer das Fitness-Quiz.
 QUIZ_QUESTIONS = [
     {"question": q, "answers": answers, "correct": answers[0]}
     for q, *answers in [
@@ -26,6 +29,7 @@ QUIZ_QUESTIONS = [
     ]
 ]
 
+# Tagesaufgaben fuer die Daily-Challenge.
 CHALLENGES = rows("""
 Trinke heute nur Wasser statt Softdrinks.
 Gehe heute 20 Minuten spazieren.
@@ -69,6 +73,7 @@ Gehe heute bewusst ein paar Minuten in die Sonne.
 Räume heute deinen Trainings- oder Arbeitsbereich auf.
 """)
 
+# Workout-Vorschlaege nach Trainingsort und Fitnesslevel.
 WORKOUTS = {
     ("zuhause", "anfaenger"): rows("""10 Kniebeugen|8 Liegestütze|20 Sekunden Plank|10 Ausfallschritte
 15 Kniebeugen|10 Sit-ups|30 Sekunden Plank|20 Hampelmänner
@@ -102,26 +107,31 @@ Frontkniebeugen 4x6|Kurzhantel-Bankdrücken 4x10|Rudern Kabelzug 4x10|Seitheben 
 }
 
 
+# Startseite ohne Challenge anzeigen.
 @app.route('/')
 def start():
     return template('start', challenge=None)
 
 
+# Startseite mit zufaelliger Daily-Challenge anzeigen.
 @app.route('/challenge')
 def challenge():
     return template('start', challenge=random.choice(CHALLENGES)[0])
 
 
+# Formularseite fuer die FitCheck-Eingaben.
 @app.route('/eingabe')
 def eingabe():
     return template('eingabe')
 
 
+# Ergebnis aus den Formulardaten berechnen und anzeigen.
 @app.route('/ergebnis', method='POST')
 def ergebnis():
     return template('ergebnis', **get_result_context(request.forms))
 
 
+# Ergebnis als Textdatei herunterladen.
 @app.route('/export', method='POST')
 def export():
     response.content_type = 'text/plain; charset=utf-8'
@@ -129,15 +139,18 @@ def export():
     return build_export_text(request.forms)
 
 
+# Einfache Inhaltsseiten ohne eigene Logik.
 for view in ('about', 'impressum', 'datenschutz', 'agb', 'tipps'):
     app.route(f'/{view}')(lambda view=view: template(view))
 
 
+# Formular fuer den Workout-Generator.
 @app.route('/workout')
 def workout_form():
     return template('workout', workout=None, error=None)
 
 
+# Workout passend zu Ort und Level auswaehlen.
 @app.route('/workout', method='POST')
 def workout_result():
     workout_options = WORKOUTS.get((request.forms.get('ort'), request.forms.get('level')))
@@ -146,6 +159,7 @@ def workout_result():
     return template('workout', workout=random.choice(workout_options), error=None)
 
 
+# Quiz steuert aktuelle Frage, Punktestand und Abschluss.
 @app.route('/quiz', method=['GET', 'POST'])
 def quiz():
     question_index = int(request.forms.get('question_index', 0))
@@ -166,10 +180,12 @@ def quiz():
     )
 
 
+# Liefert Bilder, CSS und andere Dateien aus dem static-Ordner.
 @app.route('/static/<filename:path>')
 def static_files(filename):
     return static_file(filename, root='./static')
 
 
+# Startet den lokalen Entwicklungsserver.
 if __name__ == '__main__':
     run(app, host='localhost', port=8080, debug=True, reloader=True)

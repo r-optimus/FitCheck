@@ -11,6 +11,13 @@
         <li>BMI-Berechnung</li>
         <li>BMI-Bewertung</li>
         <li>Wasserbedarf pro Tag</li>
+        <li>Proteinbedarf passend zum Ziel</li>
+        <li>Gesamtumsatz und Kalorienziel</li>
+        <li>Export der Ergebnisse als Textdatei</li>
+        <li>Tipps zu Ernährung, Bewegung und Alltag</li>
+        <li>Workout-Generator nach Ort und Level</li>
+        <li>Fitness-Quiz</li>
+        <li>Daily Challenge für kleine Tagesziele</li>
     </ul>
 
     <div class="actions">
