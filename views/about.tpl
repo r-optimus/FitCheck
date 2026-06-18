@@ -16,7 +16,6 @@
         <li>Export der Ergebnisse als Textdatei</li>
         <li>Tipps zu Ernährung, Bewegung und Alltag</li>
         <li>Workout-Generator nach Ort und Level</li>
-        <li>Fitness-Quiz</li>
         <li>Daily Challenge für kleine Tagesziele</li>
     </ul>
 

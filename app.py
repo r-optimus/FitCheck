@@ -1,10 +1,18 @@
+import hashlib
+import hmac
 import random
+import secrets
+import sqlite3
+from datetime import date
+from pathlib import Path
 
 from bottle import Bottle, request, response, run, static_file, template
 from calculation import build_export_text, get_result_context
 
 # Erstellt die Bottle-App.
 app = Bottle()
+DATABASE = Path(__file__).with_name('fitcheck_progress.db')
+COOKIE_SECRET = "fitcheck-local-login-secret"
 
 
 # Macht aus Textlisten einfache Python-Listen.
@@ -12,22 +20,156 @@ def rows(text):
     return [line.split("|") for line in text.strip().splitlines()]
 
 
-# Fragen und Antworten fuer das Fitness-Quiz.
-QUIZ_QUESTIONS = [
-    {"question": q, "answers": answers, "correct": answers[0]}
-    for q, *answers in [
-        ("Was bedeutet BMI?", "Body-Mass-Index", "Basis-Muskel-Intensität", "Bewegungs-Mess-Index"),
-        ("Was beschreibt der Gesamtumsatz?", "Deinen täglichen Kalorienverbrauch", "Nur deinen Proteinbedarf", "Nur deinen BMI"),
-        ("Was unterstützt Protein besonders?", "Muskeln und Regeneration", "Nur den Wasserbedarf", "Die Körpergröße"),
-        ("Was hilft beim Abnehmen?", "Ein moderates Kaloriendefizit", "Beliebig viele Snacks", "Gar kein Wasser trinken"),
-        ("Warum ist Wasser wichtig?", "Es unterstützt viele Körperfunktionen", "Es ersetzt Schlaf", "Es macht Protein unnötig"),
-        ("Was bedeutet Muskelaufbau beim Kalorienziel?", "Meist ein leichter Kalorienüberschuss", "Immer ein starkes Defizit", "Keine Kalorien beachten"),
-        ("Wovon hängt der Proteinbedarf in FitCheck ab?", "Gewicht und Ziel", "Nur vom Alter", "Nur von der Körpergröße"),
-        ("Was ist ein Aktivitätslevel?", "Wie aktiv du im Alltag bist", "Deine Schuhgröße", "Deine Schlafenszeit"),
-        ("Was ist ein gutes tägliches Ziel?", "Regelmäßige Bewegung", "Nie Pausen machen", "Immer Mahlzeiten auslassen"),
-        ("Was ist FitCheck hauptsächlich?", "Ein Rechner für einfache Fitnesswerte", "Ein Arzttermin", "Ein Lieferservice"),
+# Erstellt die lokale SQLite-Datenbank fuer Fortschrittswerte.
+def init_progress_db():
+    with sqlite3.connect(DATABASE) as connection:
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS progress_entries (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                entry_date TEXT NOT NULL,
+                weight REAL NOT NULL,
+                bmi REAL,
+                note TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        columns = {
+            row[1]
+            for row in connection.execute("PRAGMA table_info(progress_entries)").fetchall()
+        }
+        if "bmi" not in columns:
+            connection.execute("ALTER TABLE progress_entries ADD COLUMN bmi REAL")
+        if "user_id" not in columns:
+            connection.execute("ALTER TABLE progress_entries ADD COLUMN user_id INTEGER")
+
+
+def get_progress_connection():
+    init_progress_db()
+    connection = sqlite3.connect(DATABASE)
+    connection.row_factory = sqlite3.Row
+    return connection
+
+
+def redirect_to(location):
+    response.status = 303
+    response.set_header('Location', location)
+    return ""
+
+
+def normalize_username(username):
+    return (username or '').strip().lower()
+
+
+def hash_password(password):
+    salt = secrets.token_hex(16)
+    password_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt.encode(), 120000).hex()
+    return f"{salt}${password_hash}"
+
+
+def verify_password(password, stored_hash):
+    try:
+        salt, expected_hash = stored_hash.split('$', 1)
+    except ValueError:
+        return False
+    password_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt.encode(), 120000).hex()
+    return hmac.compare_digest(password_hash, expected_hash)
+
+
+def get_current_user():
+    user_id = request.get_cookie('fitcheck_user', secret=COOKIE_SECRET)
+    if not user_id:
+        return None
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return None
+
+    with get_progress_connection() as connection:
+        return connection.execute(
+            "SELECT id, username FROM users WHERE id = ?",
+            (user_id,)
+        ).fetchone()
+
+
+def render(view, **context):
+    context["current_user"] = get_current_user()
+    return template(view, **context)
+
+
+def optional_float(value):
+    return float(value) if value not in (None, '') else None
+
+
+def change_text(value, unit):
+    if value is None:
+        return "-"
+    sign = "+" if value > 0 else ""
+    suffix = f" {unit}" if unit else ""
+    return f"{sign}{round(value, 1)}{suffix}"
+
+
+def format_short_date(iso_date):
+    try:
+        year, month, day = iso_date.split('-')
+    except ValueError:
+        return iso_date
+    return f"{day}.{month}"
+
+
+def build_progress_context(user_id, error=None):
+    with get_progress_connection() as connection:
+        entries = connection.execute("""
+            SELECT id, entry_date, weight, bmi, note
+            FROM progress_entries
+            WHERE user_id = ?
+            ORDER BY entry_date DESC, id DESC
+        """, (user_id,)).fetchall()
+
+    oldest = entries[-1] if entries else None
+    newest = entries[0] if entries else None
+    weight_change = newest["weight"] - oldest["weight"] if len(entries) >= 2 else None
+    bmi_entries = [entry for entry in entries if entry["bmi"] is not None]
+    bmi_change = bmi_entries[0]["bmi"] - bmi_entries[-1]["bmi"] if len(bmi_entries) >= 2 else None
+    weights = [entry["weight"] for entry in entries]
+    min_weight = min(weights) if weights else 0
+    max_weight = max(weights) if weights else 0
+    weight_range = max(max_weight - min_weight, 1)
+    chart_entries = [
+        {
+            "date": entry["entry_date"],
+            "label": format_short_date(entry["entry_date"]),
+            "weight": entry["weight"],
+            "height": 24 + ((entry["weight"] - min_weight) / weight_range) * 96,
+        }
+        for entry in reversed(entries[:12])
     ]
-]
+
+    stats = [
+        ("Einträge", str(len(entries))),
+        ("Aktuelles Gewicht", f'{newest["weight"]} kg' if newest else "-"),
+        ("Aktueller BMI", str(newest["bmi"]) if newest and newest["bmi"] is not None else "-"),
+        ("Gewicht seit Start", change_text(weight_change, "kg")),
+        ("BMI seit Start", change_text(bmi_change, "")),
+    ]
+
+    return {
+        "entries": entries,
+        "stats": stats,
+        "chart_entries": chart_entries,
+        "today": date.today().isoformat(),
+        "error": error,
+    }
+
 
 # Tagesaufgaben fuer die Daily-Challenge.
 CHALLENGES = rows("""
@@ -110,25 +252,25 @@ Frontkniebeugen 4x6|Kurzhantel-Bankdrücken 4x10|Rudern Kabelzug 4x10|Seitheben 
 # Startseite ohne Challenge anzeigen.
 @app.route('/')
 def start():
-    return template('start', challenge=None)
+    return render('start', challenge=None)
 
 
 # Startseite mit zufaelliger Daily-Challenge anzeigen.
 @app.route('/challenge')
 def challenge():
-    return template('start', challenge=random.choice(CHALLENGES)[0])
+    return render('start', challenge=random.choice(CHALLENGES)[0])
 
 
 # Formularseite fuer die FitCheck-Eingaben.
 @app.route('/eingabe')
 def eingabe():
-    return template('eingabe')
+    return render('eingabe')
 
 
 # Ergebnis aus den Formulardaten berechnen und anzeigen.
 @app.route('/ergebnis', method='POST')
 def ergebnis():
-    return template('ergebnis', **get_result_context(request.forms))
+    return render('ergebnis', **get_result_context(request.forms))
 
 
 # Ergebnis als Textdatei herunterladen.
@@ -141,13 +283,13 @@ def export():
 
 # Einfache Inhaltsseiten ohne eigene Logik.
 for view in ('about', 'impressum', 'datenschutz', 'agb', 'tipps'):
-    app.route(f'/{view}')(lambda view=view: template(view))
+    app.route(f'/{view}')(lambda view=view: render(view))
 
 
 # Formular fuer den Workout-Generator.
 @app.route('/workout')
 def workout_form():
-    return template('workout', workout=None, error=None)
+    return render('workout', workout=None, error=None)
 
 
 # Workout passend zu Ort und Level auswaehlen.
@@ -155,29 +297,114 @@ def workout_form():
 def workout_result():
     workout_options = WORKOUTS.get((request.forms.get('ort'), request.forms.get('level')))
     if workout_options is None:
-        return template('workout', workout=None, error="Bitte wähle Trainingsort und Fitnesslevel aus.")
-    return template('workout', workout=random.choice(workout_options), error=None)
+        return render('workout', workout=None, error="Bitte wähle Trainingsort und Fitnesslevel aus.")
+    return render('workout', workout=random.choice(workout_options), error=None)
 
 
-# Quiz steuert aktuelle Frage, Punktestand und Abschluss.
-@app.route('/quiz', method=['GET', 'POST'])
-def quiz():
-    question_index = int(request.forms.get('question_index', 0))
-    score = int(request.forms.get('score', 0))
-    if request.method == 'POST':
-        score += request.forms.get('answer') == QUIZ_QUESTIONS[question_index]["correct"]
-        question_index += 1
+# Login-Seite fuer Fortschrittstracking.
+@app.route('/login')
+def login_form():
+    if get_current_user():
+        return redirect_to('/fortschritt')
+    return render('login', error=None)
 
-    finished = question_index >= len(QUIZ_QUESTIONS)
-    return template(
-        'quiz',
-        question=None if finished else QUIZ_QUESTIONS[question_index],
-        question_index=question_index,
-        question_number=question_index + 1,
-        total_questions=len(QUIZ_QUESTIONS),
-        score=score,
-        finished=finished
-    )
+
+# Meldet einen bestehenden Benutzer an.
+@app.route('/login', method='POST')
+def login():
+    username = normalize_username(request.forms.get('username'))
+    password = request.forms.get('password') or ''
+
+    with get_progress_connection() as connection:
+        user = connection.execute(
+            "SELECT id, username, password_hash FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+
+    if user is None or not verify_password(password, user["password_hash"]):
+        return render('login', error="Benutzername oder Passwort ist falsch.")
+
+    response.set_cookie('fitcheck_user', str(user["id"]), secret=COOKIE_SECRET, path='/', httponly=True, samesite='Lax')
+    return redirect_to('/fortschritt')
+
+
+# Erstellt einen neuen lokalen Benutzer.
+@app.route('/registrieren', method='POST')
+def register():
+    username = normalize_username(request.forms.get('username'))
+    password = request.forms.get('password') or ''
+
+    if len(username) < 3 or len(password) < 4:
+        return render('login', error="Benutzername braucht mindestens 3 Zeichen, Passwort mindestens 4.")
+
+    try:
+        with get_progress_connection() as connection:
+            cursor = connection.execute(
+                "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+                (username, hash_password(password))
+            )
+            user_id = cursor.lastrowid
+    except sqlite3.IntegrityError:
+        return render('login', error="Dieser Benutzername ist schon vergeben.")
+
+    response.set_cookie('fitcheck_user', str(user_id), secret=COOKIE_SECRET, path='/', httponly=True, samesite='Lax')
+    return redirect_to('/fortschritt')
+
+
+# Meldet den aktuellen Benutzer ab.
+@app.route('/logout')
+def logout():
+    response.delete_cookie('fitcheck_user', path='/')
+    return redirect_to('/')
+
+
+# Fortschrittsseite mit Formular, Statistik und bisherigen Eintraegen.
+@app.route('/fortschritt')
+def progress():
+    user = get_current_user()
+    if user is None:
+        return redirect_to('/login')
+    return render('fortschritt', **build_progress_context(user["id"]))
+
+
+# Speichert einen neuen Fortschrittseintrag in der lokalen SQLite-Datenbank.
+@app.route('/fortschritt', method='POST')
+def save_progress():
+    user = get_current_user()
+    if user is None:
+        return redirect_to('/login')
+
+    try:
+        entry_date = request.forms.get('entry_date') or date.today().isoformat()
+        weight = float(request.forms.get('weight'))
+        bmi = optional_float(request.forms.get('bmi'))
+        note = (request.forms.get('note') or '').strip()
+    except ValueError:
+        return render('fortschritt', **build_progress_context(user["id"], "Bitte prüfe deine Eingaben."))
+
+    with get_progress_connection() as connection:
+        connection.execute("""
+            INSERT INTO progress_entries (user_id, entry_date, weight, bmi, note)
+            VALUES (?, ?, ?, ?, ?)
+        """, (user["id"], entry_date, weight, bmi, note))
+
+    return redirect_to('/fortschritt')
+
+
+# Loescht einen Fortschrittseintrag des eingeloggten Benutzers.
+@app.route('/fortschritt/<entry_id:int>/loeschen', method='POST')
+def delete_progress_entry(entry_id):
+    user = get_current_user()
+    if user is None:
+        return redirect_to('/login')
+
+    with get_progress_connection() as connection:
+        connection.execute(
+            "DELETE FROM progress_entries WHERE id = ? AND user_id = ?",
+            (entry_id, user["id"])
+        )
+
+    return redirect_to('/fortschritt')
 
 
 # Liefert Bilder, CSS und andere Dateien aus dem static-Ordner.

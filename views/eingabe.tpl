@@ -34,7 +34,7 @@
             <option value="muskelaufbau">Muskelaufbau</option>
         </select>
 
-        <button type="submit">Absenden</button>
+        <button class="primary" type="submit">Absenden</button>
     </form>
 </section>
 

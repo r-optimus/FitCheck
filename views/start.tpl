@@ -2,11 +2,13 @@
     <img class="hero-logo" src="/static/logo.png" alt="FitCheck Logo">
     <p class="eyebrow">Fitnesswerte einfach berechnen</p>
     <p>Berechne deinen BMI, Wasserbedarf, Proteinbedarf und Kalorienbedarf.</p>
-    <div class="actions">
+    <div class="actions home-primary-action">
         <a class="button primary" href="/eingabe">Berechnung starten</a>
+    </div>
+    <div class="actions home-secondary-actions">
         <a class="button secondary" href="/workout">Workout erstellen</a>
-        <a class="button secondary" href="/quiz">Quiz starten</a>
         <a class="button secondary" href="/challenge">Daily Challenge</a>
+        <a class="button secondary" href="/fortschritt">Fortschritt tracken</a>
     </div>
     % if challenge:
     <div class="challenge-box">
@@ -29,9 +31,9 @@
             <p>Erhalte ein Ziel passend zu Abnehmen, Halten oder Aufbau.</p>
         </article>
         <article class="feature-card">
-            <span>Quiz</span>
-            <strong>Fitnesswissen</strong>
-            <p>Teste dein Wissen mit 10 kurzen Fragen.</p>
+            <span>Track</span>
+            <strong>Fortschritt</strong>
+            <p>Speichere Werte und sieh deine Entwicklung.</p>
         </article>
     </div>
 

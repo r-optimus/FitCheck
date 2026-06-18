@@ -21,8 +21,17 @@
             % end
             <button class="primary" type="submit">Ergebnis herunterladen</button>
         </form>
+        % if current_user:
+        <form class="export-form" action="/fortschritt" method="post">
+            <input type="hidden" name="weight" value="{{gewicht}}">
+            <input type="hidden" name="bmi" value="{{bmi}}">
+            <input type="hidden" name="note" value="Aus Rechner gespeichert">
+            <button class="secondary" type="submit">Als Fortschritt speichern</button>
+        </form>
+        % else:
+        <a class="button secondary" href="/login">Einloggen zum Speichern</a>
+        % end
         <a class="button secondary" href="/eingabe">Neue Berechnung</a>
-        <a class="button secondary" href="/tipps">Tipps ansehen</a>
         <a class="button secondary" href="/">Startseite</a>
     </div>
 </section>
