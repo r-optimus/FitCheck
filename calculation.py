@@ -1,4 +1,3 @@
-# Holt die Eingaben aus dem Formular und startet die Berechnung.
 def get_result_context(form):
     gewicht = float(form.get('gewicht'))
     groesse_cm = float(form.get('groesse'))
@@ -9,8 +8,6 @@ def get_result_context(form):
 
     return _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
 
-
-# Baut den Text fuer den Ergebnis-Download.
 def build_export_text(form):
     result = get_result_context(form)
 
@@ -33,21 +30,14 @@ Gesamtumsatz: {result["gesamtumsatz"]} kcal
 Kalorienziel ({result["ziel_name"]}): {result["kalorienziel"]} kcal
 """
 
-
-# Berechnet alle Fitnesswerte fuer die Ergebnis-Seite.
 def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel):
-    # BMI braucht die Groesse in Metern, obwohl die Eingabe in Zentimetern kommt.
     groesse_m = groesse_cm / 100
     bmi = gewicht / (groesse_m ** 2)
     bmi_gerundet = round(bmi, 2)
-
-    # Grundumsatz nach Geschlecht berechnen.
     if geschlecht == "maennlich":
         grundumsatz = 10 * gewicht + 6.25 * groesse_cm - 5 * alter + 5
     else:
         grundumsatz = 10 * gewicht + 6.25 * groesse_cm - 5 * alter - 161
-
-    # Aktivitaetslevel veraendert den Grundumsatz zum Gesamtumsatz.
     aktivitaet_faktoren = {
         "wenig": 1.2,
         "moderat": 1.55,
@@ -55,19 +45,15 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
     }
 
     gesamtumsatz = grundumsatz * aktivitaet_faktoren[aktivitaet]
-
-    # Das Ziel entscheidet, ob Kalorien abgezogen, addiert oder gleich gelassen werden.
     if ziel == "abnehmen":
         kalorienziel = gesamtumsatz - 500
     elif ziel == "muskelaufbau":
         kalorienziel = gesamtumsatz + 300
     else:
         kalorienziel = gesamtumsatz
-
-    # Anzeigenamen fuer die Ausgabe im Template.
     ziel_namen = {
         "abnehmen": "Abnehmen",
-        "halten": " Halten",
+        "halten": "Halten",
         "muskelaufbau": "Aufbauen"
     }
     geschlecht_namen = {
@@ -79,8 +65,6 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
         "moderat": "Mittel",
         "hoch": "Hoch"
     }
-
-    # BMI in eine einfache Kategorie einteilen.
     if bmi < 18.5:
         bewertung = "Unter"
         bmi_klasse = "bmi-orange"
@@ -93,8 +77,6 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
     else:
         bewertung = "Adipositas"
         bmi_klasse = "bmi-red"
-
-    # Wasser- und Proteinbedarf werden aus dem Gewicht berechnet.
     wasser_ml = gewicht * 35
     wasser_liter = round(wasser_ml / 1000, 2)
     protein_faktoren = {
@@ -103,8 +85,6 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
         "halten": 1.4
     }
     protein = round(gewicht * protein_faktoren[ziel], 1)
-
-    # Alle Werte sammeln, damit die Templates sie anzeigen koennen.
     result = {
         "bmi": bmi_gerundet,
         "bewertung": bewertung,
@@ -123,7 +103,6 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
         "aktivitaet_name": aktivitaet_namen[aktivitaet],
         "ziel": ziel,
     }
-    # Karten fuer die Ergebnis-Seite mit Text, Icon und Tooltip.
     result["metrics"] = [
         ("BMI", result["bmi"], "⚖️", "Der BMI bewertet dein Gewicht im Verhältnis zu deiner Körpergröße.", bmi_klasse),
         ("Bewertung", bewertung, "✅", "Diese Kategorie zeigt, wie dein BMI grob eingeordnet wird.", bmi_klasse),
@@ -132,7 +111,12 @@ def _calculate_results(gewicht, groesse_cm, alter, geschlecht, aktivitaet, ziel)
         ("Gesamtumsatz", f'{round(gesamtumsatz)} kcal', "🔥", "Dein geschätzter täglicher Kalorienverbrauch mit Aktivitätslevel.", ""),
         (f'Kalorienziel ({ziel_namen[ziel]})', f'{round(kalorienziel)} kcal', "🎯", "Dieses Ziel passt den Gesamtumsatz an dein ausgewähltes Ziel an.", ""),
     ]
-    # Versteckte Export-Felder, damit die Ergebnisdaten heruntergeladen werden koennen.
-    result["export_fields"] = [(name, result[name]) for name in ("geschlecht", "alter", "gewicht", "groesse_cm", "aktivitaet", "ziel")]
-    result["export_fields"][3] = ("groesse", groesse_cm)
+    result["export_fields"] = [
+        ("geschlecht", geschlecht),
+        ("alter", alter),
+        ("gewicht", gewicht),
+        ("groesse", groesse_cm),
+        ("aktivitaet", aktivitaet),
+        ("ziel", ziel),
+    ]
     return result

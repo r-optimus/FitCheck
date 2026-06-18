@@ -1,9 +1,7 @@
-/* Grundregel, damit Abstände und Rahmen leichter berechenbar sind. */
 * {
     box-sizing: border-box;
 }
 
-/* Allgemeines Seitenlayout und Standardschrift. */
 body {
     min-height: 100vh;
     min-width: 1100px;
@@ -18,7 +16,6 @@ a {
     color: inherit;
 }
 
-/* Zentriert die komplette Seite und begrenzt die maximale Breite. */
 .page-shell {
     display: flex;
     flex-direction: column;
@@ -28,7 +25,6 @@ a {
     padding: 24px 0 48px;
 }
 
-/* Navigation oben auf jeder Seite. */
 .nav {
     display: flex;
     align-items: center;
@@ -43,7 +39,6 @@ a {
     gap: 8px 18px;
 }
 
-/* Links in der Navigation. */
 .nav a {
     color: #43545b;
     font-weight: 700;
@@ -55,7 +50,6 @@ a {
     font-weight: 900;
 }
 
-/* Hover-Effekt fuer Navigationslinks. */
 .nav a:hover {
     color: #0f6f78;
 }
@@ -103,27 +97,23 @@ a {
     text-align: center;
 }
 
-/* Logo-Link links in der Navigation. */
 .nav .brand {
     display: inline-flex;
     align-items: center;
     margin-left: 0;
 }
 
-/* Groesse des Logos in der Navigation. */
 .nav-logo {
     display: block;
     width: 48px;
     height: auto;
 }
 
-/* Speziallayout fuer die Startseite. */
 .hero {
     display: flex;
     flex-direction: column;
 }
 
-/* Gemeinsames Karten-Design fuer Startseite und Inhaltsseiten. */
 .hero-content,
 .panel {
     background: rgba(255, 255, 255, 0.82);
@@ -132,14 +122,12 @@ a {
     box-shadow: 0 20px 55px rgba(29, 52, 58, 0.12);
 }
 
-/* Inhalt der Startseite. */
 .hero-content {
     margin: auto 0;
     padding: 78px 96px;
     text-align: center;
 }
 
-/* Grosses Logo auf der Startseite. */
 .hero-logo {
     display: block;
     width: 640px;
@@ -147,7 +135,6 @@ a {
     margin: 0 auto 32px;
 }
 
-/* Standardbox fuer normale Unterseiten. */
 .panel {
     width: 100%;
     max-width: 780px;
@@ -155,12 +142,10 @@ a {
     padding: 68px 78px;
 }
 
-/* Breitere Variante fuer Textseiten. */
 .content {
     max-width: 980px;
 }
 
-/* Bild auf der Ueber-uns-Seite. */
 .about-image {
     display: block;
     width: 260px;
@@ -168,7 +153,6 @@ a {
     margin: 32px auto 0;
 }
 
-/* Kleine Oberzeile ueber der Hauptueberschrift. */
 .eyebrow {
     margin: 0 0 10px;
     color: #0f6f78;
@@ -178,14 +162,12 @@ a {
     text-transform: uppercase;
 }
 
-/* Entfernt obere Standardabstaende von Textueberschriften. */
 h1,
 h2,
 p {
     margin-top: 0;
 }
 
-/* Grosse Hauptueberschrift. */
 h1 {
     margin-bottom: 16px;
     color: #132d32;
@@ -193,31 +175,26 @@ h1 {
     line-height: 1;
 }
 
-/* Kleinere Hauptueberschrift innerhalb von Karten. */
 .panel h1 {
     font-size: 3.4rem;
 }
 
-/* Unterueberschriften. */
 h2 {
     margin: 28px 0 8px;
     color: #1f4d54;
     font-size: 1.25rem;
 }
 
-/* Standardtext und Listenpunkte. */
 p,
 li {
     color: #52646b;
     font-size: 1.05rem;
 }
 
-/* Einrueckung fuer Listen. */
 ul {
     padding-left: 20px;
 }
 
-/* Bereich fuer mehrere Buttons nebeneinander. */
 .actions {
     display: flex;
     align-items: flex-start;
@@ -226,7 +203,6 @@ ul {
     margin-top: 28px;
 }
 
-/* Buttonbreite im Aktionsbereich. */
 .actions .button,
 .actions .export-form {
     flex: 0 1 210px;
@@ -244,7 +220,6 @@ ul {
     flex: none;
 }
 
-/* Zentriert Buttons auf der Startseite. */
 .hero-content .actions {
     justify-content: center;
 }
@@ -265,7 +240,6 @@ ul {
     flex: 0 0 230px;
 }
 
-/* Box fuer die Daily-Challenge. */
 .challenge-box {
     max-width: 520px;
     margin: 28px auto 0;
@@ -294,7 +268,6 @@ ul {
     line-height: 1.35;
 }
 
-/* Karte fuer berechnete FitCheck-Ergebnisse. */
 .result-card {
     margin-top: 24px;
     padding: 22px;
@@ -313,7 +286,6 @@ ul {
     font-weight: 800;
 }
 
-/* Footer mit rechtlichen Links. */
 .footer {
     display: flex;
     justify-content: center;
@@ -333,7 +305,6 @@ ul {
     color: #0f6f78;
 }
 
-/* Allgemeines Button-Design. */
 .button,
 button {
     display: inline-flex;
@@ -349,7 +320,6 @@ button {
     cursor: pointer;
 }
 
-/* Hauptbutton fuer wichtige Aktionen. */
 .primary {
     background: #0f6f78;
     color: white;
@@ -359,7 +329,6 @@ button {
     background: #0b5961;
 }
 
-/* Zweiter Button fuer Nebenaktionen. */
 .secondary {
     background: #e8efea;
     color: #234247;
@@ -369,14 +338,12 @@ button {
     background: #dce8e0;
 }
 
-/* Allgemeines Formularlayout. */
 form {
     display: grid;
     gap: 10px;
     margin-top: 24px;
 }
 
-/* Exportformular soll sich wie ein Button verhalten. */
 .export-form {
     display: block;
     margin: 0;
@@ -386,13 +353,11 @@ form {
     width: 100%;
 }
 
-/* Beschriftungen vor Eingabefeldern. */
 label {
     color: #30454b;
     font-weight: 800;
 }
 
-/* Eingabefelder und Auswahlfelder. */
 input,
 select {
     width: 100%;
@@ -410,14 +375,12 @@ select {
     appearance: none;
 }
 
-/* Fokuszustand beim Anklicken von Formularfeldern. */
 input:focus,
 select:focus {
     border-color: #0f6f78;
     outline: 3px solid rgba(15, 111, 120, 0.16);
 }
 
-/* Raster fuer die Ergebnis-Kacheln. */
 .result-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -425,7 +388,6 @@ select:focus {
     margin-top: 26px;
 }
 
-/* Einzelne Ergebnis-Kachel. */
 .metric {
     position: relative;
     min-height: 122px;
@@ -435,7 +397,6 @@ select:focus {
     background: #f8fbf7;
 }
 
-/* Info-Icon mit Tooltip in Ergebnis-Kacheln. */
 .metric-info {
     position: absolute;
     top: 10px;
@@ -457,7 +418,6 @@ select:focus {
     pointer-events: none;
 }
 
-/* Tooltip-Text fuer Ergebnis-Kacheln. */
 .metric-info::after {
     position: absolute;
     right: 0;

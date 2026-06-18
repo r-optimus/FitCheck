@@ -1,1 +1,3 @@
 fitcheck_progress.db
+__pycache__/
+.DS_Store
