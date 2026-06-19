@@ -1,0 +1,20 @@
+Teammitglied 1: Roman Oswald
+Verantwortungsbereich: Backend
+- Routing in app.py
+- Logik fuer Berechnungen, Login, Registrierung und Fortschritt
+- Datenbank-Anbindung
+- Fehlerbehebung im Python-Code
+
+Teammitglied 2: Nazmi Cinko
+Verantwortungsbereich: CSS
+- Gestaltung der Oberflaeche in static/style.css
+- Layout, Farben, Abstaende und responsive Design
+- Dark Mode Styling
+- Optische Fehlerbehebung
+
+Teammitglied 3: Berat Esen
+Verantwortungsbereich: Template
+- Aufbau und Pflege der Template-Dateien in views/
+- Startseite, Workout-Seite, Tipps, Login und weitere Seiten
+- Einbindung der Inhalte in die HTML-Struktur
+- Anpassungen an Formularen und Ausgabebereichen

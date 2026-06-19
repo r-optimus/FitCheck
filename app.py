@@ -1,6 +1,5 @@
 import hashlib
 import hmac
-import random
 import secrets
 import sqlite3
 from datetime import date
@@ -13,9 +12,6 @@ app = Bottle()
 DATABASE = Path(__file__).with_name('fitcheck_progress.db')
 COOKIE_SECRET = "fitcheck-local-login-secret"
 PASSWORD_ITERATIONS = 120_000
-
-def rows(text):
-    return [line.split("|") for line in text.strip().splitlines()]
 
 def init_database():
     with sqlite3.connect(DATABASE) as connection:
@@ -149,88 +145,13 @@ def build_progress_context(user_id, error=None):
         "error": error,
     }
 
-CHALLENGES = rows("""
-Trinke heute nur Wasser statt Softdrinks.
-Gehe heute 20 Minuten spazieren.
-Iss heute zu jeder Mahlzeit etwas Gemüse.
-Verzichte heute auf Fast Food.
-Gehe heute 30 Minuten früher ins Bett.
-Mache heute einen Spaziergang nach dem Abendessen.
-Lass heute eine unnötige Autofahrt weg und gehe zu Fuß.
-Trinke direkt nach dem Aufstehen ein Glas Wasser.
-Verzichte heute auf Süßigkeiten.
-Stehe heute jede Stunde einmal kurz auf.
-Mache heute etwas Sport, egal wie kurz.
-Iss heute bewusst und ohne Handy oder Fernseher.
-Nimm heute die Treppe statt den Aufzug.
-Verbringe heute mindestens 30 Minuten draußen.
-Achte heute auf eine aufrechte Haltung.
-Trinke heute mindestens 2 Liter Wasser.
-Mache heute einen kleinen Abendspaziergang.
-Lass heute ein zuckerhaltiges Getränk weg.
-Iss heute eine extra Portion Obst.
-Plane heute deine Sporteinheit für die Woche.
-Gehe heute mindestens 8.000 Schritte.
-Mache heute 10 Minuten Dehnübungen.
-Verzichte heute auf einen späten Mitternachtssnack.
-Koche heute eine Mahlzeit selbst.
-Iss heute langsam und ohne Eile.
-Gehe heute für frische Luft nach draußen, auch wenn du keine Lust hast.
-Stehe heute beim Telefonieren auf und bewege dich.
-Trinke vor jeder Mahlzeit ein Glas Wasser.
-Verbringe heute 30 Minuten ohne Social Media.
-Mache heute etwas, das deinen Stress reduziert.
-Gehe heute eine Haltestelle früher aus Bus oder Bahn.
-Achte heute darauf, genug Protein zu essen.
-Mache heute einen kurzen Spaziergang in deiner Mittagspause.
-Lüfte heute mehrmals deine Wohnung.
-Versuche heute mindestens 7 Stunden zu schlafen.
-Iss heute keine Chips oder Snacks aus Langeweile.
-Bewege dich heute insgesamt mindestens 30 Minuten.
-Starte den Tag mit einem gesunden Frühstück.
-Gehe heute bewusst ein paar Minuten in die Sonne.
-Räume heute deinen Trainings- oder Arbeitsbereich auf.
-""")
-
-WORKOUTS = {
-    ("zuhause", "anfaenger"): rows("""10 Kniebeugen|8 Liegestütze|20 Sekunden Plank|10 Ausfallschritte
-15 Kniebeugen|10 Sit-ups|30 Sekunden Plank|20 Hampelmänner
-20 Kniebeugen|10 Liegestütze|15 Ausfallschritte|30 Sekunden Plank"""),
-    ("zuhause", "fortgeschritten"): rows("""25 Kniebeugen|20 Liegestütze|45 Sekunden Plank|20 Ausfallschritte
-30 Kniebeugen|15 Burpees|60 Sekunden Plank|30 Hampelmänner
-20 Burpees|25 Liegestütze|60 Sekunden Plank|30 Kniebeugen"""),
-    ("zuhause", "profi"): rows("""40 Kniebeugen|20 Liegestütze|90 Sekunden Plank|40 Ausfallschritte
-50 Kniebeugen|25 Burpees|120 Sekunden Plank|50 Hampelmänner
-30 Burpees|30 Liegestütze|2 Minuten Plank|60 Kniebeugen"""),
-    ("gym", "anfaenger"): rows("""Beinpresse 3x10|Brustpresse 3x10|Latzug 3x10|Plank 3x30 Sekunden
-Rudern 3x10|Schulterpresse 3x10|Beinbeuger 3x10|10 Minuten Fahrrad
-Beinstrecker 3x12|Brustpresse 3x12|Latzug 3x12|Bauchmaschine 3x15"""),
-    ("gym", "fortgeschritten"): rows("""Kniebeugen 4x8|Bankdrücken 4x8|Rudern 4x10|Schulterdrücken 3x10
-Kreuzheben 4x6|Latzug 4x10|Beinpresse 4x10|Bizepscurls 3x12
-Schrägbankdrücken 4x8|Rudern Kabelzug 4x10|Beinstrecker 3x12|Trizepsdrücken 3x12"""),
-    ("gym", "profi"): rows("""Kniebeugen 5x5|Bankdrücken 5x5|Kreuzheben 5x5|Klimmzüge 4xMax
-Schrägbankdrücken 4x8|Rudern 4x10|Beinpresse 4x10|Schulterdrücken 4x10
-Kreuzheben 4x6|Klimmzüge 4xMax|Bulgarian Split Squats 3x12|Bizepscurls 3x12
-Bankdrücken 4x8|Latzug 4x10|Beinstrecker 3x12|Trizepsdrücken 3x12
-Frontkniebeugen 4x6|Kurzhantel-Bankdrücken 4x10|Rudern Kabelzug 4x10|Seitheben 3x15"""),
-    ("outdoor", "anfaenger"): rows("""15 Minuten Spaziergang|10 Kniebeugen|10 Ausfallschritte|5 Minuten Dehnen
-20 Minuten zügiges Gehen|15 Kniebeugen|10 Liegestütze|5 Minuten Dehnen
-2 km Spaziergang|15 Kniebeugen|15 Ausfallschritte|30 Sekunden Plank"""),
-    ("outdoor", "fortgeschritten"): rows("""3 km Joggen|20 Kniebeugen|15 Liegestütze|10 Ausfallschritte
-20 Minuten Intervalllauf|25 Kniebeugen|20 Liegestütze|60 Sekunden Plank
-4 km Lauf|20 Ausfallschritte|20 Liegestütze|45 Sekunden Plank"""),
-    ("outdoor", "profi"): rows("""5 km Lauf|30 Liegestütze|50 Kniebeugen|90 Sekunden Plank
-10 Sprintintervalle|40 Ausfallschritte|30 Liegestütze|2 Minuten Plank
-8 km Lauf|50 Kniebeugen|40 Liegestütze|2 Minuten Plank"""),
-}
-
 @app.route('/')
 def start():
-    return render('start', challenge=None)
+    return render('start', show_challenge=False)
 
 @app.route('/challenge')
 def challenge():
-    return render('start', challenge=random.choice(CHALLENGES)[0])
+    return render('start', show_challenge=True)
 
 @app.route('/eingabe')
 def eingabe():
@@ -251,14 +172,16 @@ for view in ('about', 'impressum', 'datenschutz', 'agb', 'tipps'):
 
 @app.route('/workout')
 def workout_form():
-    return render('workout', workout=None, error=None)
+    return render('workout', submitted=False, ort=None, level=None)
 
 @app.route('/workout', method='POST')
 def workout_result():
-    workout_options = WORKOUTS.get((request.forms.get('ort'), request.forms.get('level')))
-    if workout_options is None:
-        return render('workout', workout=None, error="Bitte wähle Trainingsort und Fitnesslevel aus.")
-    return render('workout', workout=random.choice(workout_options), error=None)
+    return render(
+        'workout',
+        submitted=True,
+        ort=request.forms.get('ort'),
+        level=request.forms.get('level'),
+    )
 
 @app.route('/login')
 def login_form():
